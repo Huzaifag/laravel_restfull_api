@@ -1,66 +1,171 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# How to Build a REST API With Laravel: PHP Full Course
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 1.1 Introduction
 
-## About Laravel
+A RESTful API in Laravel is an implementation of a **REST (Representational State Transfer)** architecture, which is a set of principles for designing networked applications. In Laravel, RESTful APIs allow you to expose your application's functionality and data to other systems (e.g., front-end apps, mobile apps, or third-party services) over HTTP.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Key Concepts of RESTful APIs in Laravel:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **Resources**: REST revolves around resources, which are typically entities in your application (e.g., users, posts, products). Each resource is represented by a unique URL.
+2. **HTTP Methods**: RESTful APIs use HTTP methods to perform actions on resources:
+    - `GET`: Retrieve data (e.g., fetch a list of users or a single user).
+    - `POST`: Create a new resource (e.g., add a new user).
+    - `PUT/PATCH`: Update an existing resource (e.g., edit user details).
+    - `DELETE`: Remove a resource (e.g., delete a user).
+3. **Statelessness**: Each API request is independent and contains all the information needed to process it (e.g., authentication tokens, request data).
+4. **JSON Responses**: RESTful APIs typically return data in JSON format, which is lightweight and easy to parse.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Use Cases for RESTful APIs in Laravel:
 
-## Learning Laravel
+1. **Mobile Applications**: Provide a backend for mobile apps to interact with your Laravel application (e.g., user authentication, fetching data).
+2. **Single Page Applications (SPAs)**: Enable front-end frameworks like React, Vue.js, or Angular to communicate with your Laravel backend.
+3. **Third-Party Integrations**: Allow external systems or services to interact with your application (e.g., payment gateways, analytics tools).
+4. **Microservices Architecture**: Use RESTful APIs to enable communication between different services in a distributed system.
+5. **Public APIs**: Expose parts of your application to external developers for integration (e.g., providing a weather API or e-commerce product catalog).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Example in Laravel:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Laravel makes it easy to build RESTful APIs using **routes**, **controllers**, and **Eloquent models**. Here's a simple example:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```php
+use App\Http\Controllers\UserController;
 
-## Laravel Sponsors
+Route::get('/users', [UserController::class, 'index']); // Fetch all users
+Route::get('/users/{id}', [UserController::class, 'show']); // Fetch a single user
+Route::post('/users', [UserController::class, 'store']); // Create a new user
+Route::put('/users/{id}', [UserController::class, 'update']); // Update a user
+Route::delete('/users/{id}', [UserController::class, 'destroy']); // Delete a user
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Each route corresponds to a specific HTTP method and action in the `UserController`. This structure adheres to RESTful principles.
 
-### Premium Partners
+## 2. Getting Started
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### 2.1 Creating the Project
 
-## Contributing
+```bash
+composer create-project "laravel/laravel:^10.0" example-app
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+composer global require laravel/installer
 
-## Code of Conduct
+laravel new example-app
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+composer require laravel/sanctum
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+```
 
-## Security Vulnerabilities
+2.2 Designing and Seeding the Database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```php
+php artisan make:model Costumer --all
+php artisan make:model Invoice --all
+```
 
-## License
+**Relationships**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```php
+
+//Invoice Model
+    public function customer(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+//Customer Model
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
+```
+
+**Factories**
+
+```php
+//Customer Factory
+public function definition(): array
+    {
+        $type = $this->faker->randomElement(['individual', 'company']);
+        $name = $type === 'individual' ? $this->faker->name() : $this->faker->company();
+        return [
+            'name' => $name,
+            'type' => $type,
+            'email' => $this->faker->email(),
+            'address' => $this->faker->address(),
+            'city' => $this->faker->city(),
+            'state' => $this->faker->state(),
+            'postal_code' => $this->faker->postcode(),
+        ];
+    }
+
+//Invoice Factory
+    public function definition(): array
+    {
+        $status = $this->faker->randomElement(['paid', 'billed', 'void']);
+        return [
+            'customer_id' => Customer::factory(),
+            'amount' => $this->faker->numberBetween(100, 1000),
+            'status' => $status,
+            'billed_date' => $this->faker->dateTimeThisDecade(),
+            'paid_date' => $status === 'paid' ? $this->faker->dateTimeThisDecade() : null,
+        ];
+    }
+```
+
+**Seeder**
+
+```php
+//Customer Seeder
+public function run(): void
+    {
+        Customer::factory()
+        ->count(25)
+        ->hasInvoices(10)
+        ->create();
+
+        Customer::factory()
+        ->count(100)
+        ->hasInvoices(5)
+        ->create();
+
+        Customer::factory()
+        ->count(100)
+        ->hasInvoices(3)
+        ->create();
+
+        Customer::factory()
+        ->count(100)
+        ->create();
+    }
+
+    //Database Seeder 
+    public function run(): void
+    {
+        $this->call([
+            CustomerSeeder::class,
+        ]);
+    }
+```
+
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+## 3. Providing Data
+### 3.1 Versioning and Defining Routes
+```php
+
+```
+   00:26:17 3.2 Transforming Database Data Into JSON
+   00:35:48 3.3 Filtering Data
+   00:49:47 3.4 Filtering More Data
+   00:58:49 3.5 Including Related Data
+
+4. Manipulating Data
+   01:05:37 4.1 Creating Resources With POST Requests
+   01:14:48 4.2 Updating With PUT and PATCH
+   01:22:51 4.3 Implementing Bulk Insert
+
+5. Authentication
+   01:33:41 5.1 Protecting Routes With Sanctum
+   01:41:29 5.2 Authorizing Requests With Token Abilities
