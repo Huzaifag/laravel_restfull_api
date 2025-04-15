@@ -154,9 +154,19 @@ php artisan migrate:fresh --seed
 ## 3. Providing Data
 ### 3.1 Versioning and Defining Routes
 ```php
+Route::prefix('v1')->namespace('App\Http\Controllers\Api\V1')->group(function () {
+    Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('invoices', InvoiceController::class);
+});
+```
+### 3.2 Transforming Database Data Into JSON
+```bash
+php artisan make:resource v1\CustomerResource
+```
+
+```php
 
 ```
-   00:26:17 3.2 Transforming Database Data Into JSON
    00:35:48 3.3 Filtering Data
    00:49:47 3.4 Filtering More Data
    00:58:49 3.5 Including Related Data
